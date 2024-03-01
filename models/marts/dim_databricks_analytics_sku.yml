@@ -1,0 +1,17 @@
+version: 2
+ 
+models:
+  - name: dim_databricks_analytics_sku
+    description: Information about the sku's existent on the table Databricks Billing
+    columns:
+      - name: sku_sk
+        description: Primary key of the table
+        tests:
+          - unique
+          - not_null
+
+      - name: sku 
+        description: The type of the billing SKU
+
+      - name: dbus_unit_price
+        description: Price per DBU (https://www.databricks.com/product/pricing)

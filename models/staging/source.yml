@@ -1,0 +1,34 @@
+version: 2
+sources:
+  - name: raw_databricks
+    database: "{{ var('databricks_billing_database', '')}}"
+    schema: "{{ var('databricks_billing_schema',  raw_databricks) }}"
+    description: Raw information from the databricks billing table
+    tables:
+      - name: databricks_billing
+        description: Table with information from databricks usage and billing
+        columns:
+          - name: workspaceid
+            description: ID of the workspace
+          - name: timestamp
+            description: End of the hour for the provided usage
+          - name: clusterid
+            description: ID of the cluster (for a cluster) or of the warehouse (for a SQL warehouse)
+          - name: clustername
+            description: User-provided name for the cluster/warehouse
+          - name: clusternodetype
+            description: Instance type of the cluster/warehouse
+          - name: clusterowneruserid
+            description: ID of the user who created the cluster/warehouse
+          - name: clustercustomtags
+            description: Custom tags associated with the cluster/warehouse during this hour
+          - name: sku
+            description: Billing SKU
+          - name: dbus
+            description: Number of DBUs used by the user during this hour
+          - name: machinehours
+            description: Total number of machine hours used by all containers in the cluster/warehouse
+          - name: dbus_unit_price
+            description: The price for each DBU used, according to the SKU
+          - name: total_price
+            description: Amount to be paid for the used dbus
