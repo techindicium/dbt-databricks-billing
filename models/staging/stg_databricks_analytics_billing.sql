@@ -12,7 +12,8 @@ with
             , cast(sku as string) as sku
             , round(dbus,2) as dbus
             , round(machinehours,2) as machine_hours
-        from {{ source('raw_databricks', 'databricks_billing') }}
+            , '_SDC_EXTRACTED_AT' as extracted_at
+        from {{ source('raw_databricks', 'billing') }}
     )
 
     , case_when as (
@@ -36,6 +37,7 @@ with
                   else null
             end as dbus_unit_price
             , machine_hours
+            , extracted_at
         from renamed
     )
 
@@ -54,6 +56,7 @@ with
             , dbus_unit_price
             , (dbus * dbus_unit_price) as total_price
             , machine_hours
+            , extracted_at
         from case_when
     )
 

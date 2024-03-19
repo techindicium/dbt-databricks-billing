@@ -37,6 +37,7 @@ with
             , dbus_unit_price
             , total_price
             , machine_hours
+            , extracted_at
         from {{ ref('stg_databricks_analytics_billing') }}
     )
 
@@ -57,6 +58,7 @@ with
             , stg_billing.dbus_unit_price
             , stg_billing.total_price
             , stg_billing.machine_hours
+            , stg_billing.extracted_at
         from stg_billing
         left join dim_cluster 
             on stg_billing.cluster_id = dim_cluster.cluster_id 
@@ -65,32 +67,5 @@ with
         left join dim_dates on stg_billing.end_date = dim_dates.data_dia
     )
 
-    , dedup as (
-        select *
-            , row_number() over (partition by cluster_fk, data_dia, end_time order by data_dia, end_time) as row_num
-        from joined
-    )
-
-    , deduplicated as (
-        select
-            cluster_fk
-            , sku_fk
-            , workspace_id
-            , cluster_id
-            , owner_id
-            , cluster_name
-            , data_dia
-            , end_time
-            , node_type
-            , custom_tags
-            , sku
-            , dbus
-            , dbus_unit_price
-            , total_price
-            , machine_hours
-        from dedup
-        where row_num = 1
-    )
-
 select *
-from deduplicated
+from joined

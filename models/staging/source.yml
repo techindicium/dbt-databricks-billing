@@ -5,7 +5,7 @@ sources:
     schema: "{{ var('databricks_billing_schema',  raw_databricks) }}"
     description: Raw information from the databricks billing table
     tables:
-      - name: databricks_billing
+      - name: billing
         description: Table with information from databricks usage and billing
         columns:
           - name: workspaceid
@@ -28,7 +28,5 @@ sources:
             description: Number of DBUs used by the user during this hour
           - name: machinehours
             description: Total number of machine hours used by all containers in the cluster/warehouse
-          - name: dbus_unit_price
-            description: The price for each DBU used, according to the SKU
-          - name: total_price
-            description: Amount to be paid for the used dbus
+          - name: _sdc_extracted_at
+            description: date of the extraction

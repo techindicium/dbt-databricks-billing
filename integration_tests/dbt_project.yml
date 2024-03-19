@@ -1,4 +1,4 @@
-name: 'databricks_billing'
+name: 'databricks_billing_integration_tests'
 version: '1.0.0'
 config-version: 2
 
@@ -12,17 +12,23 @@ macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
 target-path: "target"  
-clean-targets:         
+clean-targets:       
   - "target"
   - "dbt_packages"
 
 models:
   databricks_billing:
       marts:
-        materialized: table
+        materialized: view
       staging:
         materialized: view
 
+seeds:
+    databricks_billing:
+      +database: SANDBOX
+      +tags: integration_tests
+      +schema: DEV_SUELEN_RODRIGUES
+
 vars:
-  databricks_billing_database: database_name
-  databricks_billing_schema: schema_name
+  databricks_billing_database: SANDBOX
+  databricks_billing_schema: DEV_SUELEN_RODRIGUES

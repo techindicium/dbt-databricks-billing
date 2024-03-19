@@ -1,7 +1,7 @@
 version: 2
  
 models:
-  - name: fact_databricks_analytics_billing
+  - name: fct_databricks_analytics_billing
     description: Information about the DBUs used, machine hours and costs related to Databricks
     columns:
       - name: cluster_fk
