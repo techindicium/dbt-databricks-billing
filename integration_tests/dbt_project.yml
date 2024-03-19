@@ -25,10 +25,10 @@ models:
 
 seeds:
     databricks_billing:
-      +database: SANDBOX
+      +database: database_name
       +tags: integration_tests
-      +schema: DEV_SUELEN_RODRIGUES
+      +schema: schema_name
 
 vars:
-  databricks_billing_database: SANDBOX
-  databricks_billing_schema: DEV_SUELEN_RODRIGUES
+  databricks_billing_database: database_name
+  databricks_billing_schema: schema_name
