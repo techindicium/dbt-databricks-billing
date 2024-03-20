@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 4129c88edd54b1397a61b8f1cb40742bfa10008e
 name: 'databricks_billing'
 version: '1.0.0'
 config-version: 2
 
 profile: 'databricks_billing'
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4129c88edd54b1397a61b8f1cb40742bfa10008e
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
