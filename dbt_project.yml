@@ -1,0 +1,31 @@
+
+name: 'databricks_billing'
+version: '1.0.0'
+config-version: 2
+
+profile: 'databricks_billing'
+
+
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  
+clean-targets:         
+  - "target"
+  - "dbt_packages"
+
+
+models:
+  databricks_billing:
+      marts:
+        materialized: view
+      staging:
+        materialized: view
+
+vars:
+  databricks_billing_database: database_name
+  databricks_billing_schema: schema_name

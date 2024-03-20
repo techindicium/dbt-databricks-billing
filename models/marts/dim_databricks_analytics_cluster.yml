@@ -1,0 +1,26 @@
+version: 2
+ 
+models:
+  - name: dim_databricks_analytics_cluster
+    description: Information about the clusters existent on the table Databricks Billing
+    columns:
+      - name: cluster_sk
+        description: Primary key of the table
+        tests:
+          - unique
+          - not_null
+
+      - name: cluster_id 
+        description: Identification of the cluster
+
+      - name: owner_id
+        description: ID of the user who created the cluster/warehouse
+     
+      - name: cluster_name
+        description: User-provided name for the cluster/warehouse
+     
+      - name: node_type
+        description: Instance type of the cluster/warehouse
+
+      - name: custom_tags
+        description: Custom tags associated with the cluster/warehouse during this hour

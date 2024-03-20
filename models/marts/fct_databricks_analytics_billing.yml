@@ -1,0 +1,50 @@
+version: 2
+ 
+models:
+  - name: fact_databricks_analytics_billing
+    description: Information about the DBUs used, machine hours and costs related to Databricks
+    columns:
+      - name: cluster_fk
+        description: Foreign key of the clusters
+
+      - name: sku_fk
+        description: Foreign key of the skus
+
+      - name: workspace_id
+        description: ID of the workspace
+
+      - name: cluster_id 
+        description: Identification of the cluster
+
+      - name: owner_id
+        description: ID of the user who created the cluster/warehouse
+     
+      - name: cluster_name
+        description: User-provided name for the cluster/warehouse
+     
+      - name: node_type
+        description: Instance type of the cluster/warehouse
+
+      - name: custom_tags
+        description: Custom tags associated with the cluster/warehouse during this hour
+
+      - name: sku 
+        description: The type of the billing SKU
+
+      - name: data_dia
+        description: Date related to dim_dates
+
+      - name: end_time
+        description: End of the hour for the provided usage
+
+      - name: dbus
+        description: Number of DBUs used by the user during this hour
+
+      - name: dbus_unit_price
+        description: The price of one DBU
+
+      - name: total_price
+        description: The unit price of the DBU multiplied by the DBUs used
+
+      - name: machine_hours
+        description: Total number of machine hours used by all containers in the cluster/warehouse
