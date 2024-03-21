@@ -23,6 +23,3 @@ models:
       staging:
         materialized: view
 
-vars:
-  databricks_billing_database: database_name
-  databricks_billing_schema: schema_name
