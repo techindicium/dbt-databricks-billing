@@ -1,6 +1,6 @@
 with
     dim_dates as (
-        select data_dia
+        select date_day
         from {{ ref('dim_dates') }}
     )
 
@@ -49,7 +49,7 @@ with
             , dim_cluster.cluster_id
             , dim_cluster.owner_id
             , dim_cluster.cluster_name
-            , dim_dates.data_dia
+            , dim_dates.date_day
             , stg_billing.end_time
             , dim_cluster.node_type
             , dim_cluster.custom_tags
@@ -64,7 +64,7 @@ with
             on stg_billing.cluster_id = dim_cluster.cluster_id 
             and stg_billing.node_type = dim_cluster.node_type
         left join dim_sku on stg_billing.sku = dim_sku.sku
-        left join dim_dates on stg_billing.end_date = dim_dates.data_dia
+        left join dim_dates on stg_billing.end_date = dim_dates.date_day
     )
 
 select *
