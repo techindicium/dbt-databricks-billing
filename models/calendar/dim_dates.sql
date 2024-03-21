@@ -181,11 +181,8 @@ with
             , semester
             , nome_semestre
             , semester_name
-            , fl_feriado
             , fl_holiday
-            , fl_dia_util
             , fl_business_day
-            , fl_final_semana
             , fl_weekend
             , day_of_year
             , year
