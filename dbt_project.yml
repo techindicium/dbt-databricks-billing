@@ -18,8 +18,8 @@ clean-targets:
 
 models:
   databricks_billing:
-      marts:
-        +materialized: table
-      staging:
-        +materialized: view
+    marts:
+      +materialized: table
+    staging:
+      +materialized: view
 
