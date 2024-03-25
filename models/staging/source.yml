@@ -1,7 +1,7 @@
 version: 2
 sources:
   - name: raw_databricks
-    database: "{{ var('databricks_billing_database', '')}}"
+    database: "{{ var('databricks_billing_database', '') }}"
     schema: "{{ var('databricks_billing_schema',  raw_databricks) }}"
     description: Raw information from the databricks billing table
     tables:
