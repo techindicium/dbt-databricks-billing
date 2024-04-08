@@ -2,7 +2,7 @@ name: 'databricks_billing_integration_tests'
 version: '1.0.0'
 config-version: 2
 
-profile: 'databricks_billing'
+profile: 'integration_tests'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -25,10 +25,10 @@ models:
 
 seeds:
     databricks_billing:
-      +database: database_name
+      +database: "{{ env_var('SNOWFLAKE_TEST_DATABASE') }}"
       +tags: integration_tests
-      +schema: schema_name
+      +schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
 
 vars:
-  databricks_billing_database: database_name
-  databricks_billing_schema: schema_name
+  databricks_billing_database: "{{ env_var('SNOWFLAKE_TEST_DATABASE') }}"
+  databricks_billing_schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
