@@ -25,10 +25,10 @@ models:
 
 seeds:
     databricks_billing:
-      +database: ${{ vars.SNOWFLAKE_TEST_DATABASE }}
+      +database: sandbox
       +tags: integration_tests
-      +schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
+      +schema: DEV_ARTHUR_CERQUEIRA
 
 vars:
-  databricks_billing_database: ${{ vars.SNOWFLAKE_TEST_DATABASE }}
-  databricks_billing_schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
+  databricks_billing_database: sandbox
+  databricks_billing_schema: DEV_ARTHUR_CERQUEIRA
