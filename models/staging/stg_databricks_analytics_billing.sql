@@ -12,7 +12,7 @@ with
             , cast(sku as string) as sku
             , round(dbus,2) as dbus
             , round(machinehours,2) as machine_hours
-            , '_SDC_EXTRACTED_AT' as extracted_at
+            , _SDC_EXTRACTED_AT as extracted_at
         from {{ source('raw_databricks', 'billing') }}
     )
 
@@ -41,7 +41,7 @@ with
         from renamed
     )
 
-        , calculate as (
+    , calculate as (
         select
             workspace_id
             , cluster_id
