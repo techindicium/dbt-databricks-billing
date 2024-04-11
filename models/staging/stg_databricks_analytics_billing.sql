@@ -6,7 +6,7 @@ with
             , clusterowneruserid owner_id
             , cast(clustername as string) as cluster_name
             , cast(timestamp as date) as end_date
-            , hour(timestamp) as end_time
+            , substring(timestamp, 12, 8) as end_time
             , cast(clusternodetype as string) as node_type
             , cast(clustercustomtags as string) as custom_tags
             , cast(sku as string) as sku

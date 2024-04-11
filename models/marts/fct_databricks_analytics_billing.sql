@@ -69,6 +69,17 @@ with
 
     , dedup as (
         select
+            *
+            , row_number() over (
+                partition by date_day, end_time, node_type 
+                order by extracted_at desc
+              ) as row_num
+        from joined
+        qualify row_num = 1
+    )
+
+    , deduplicated as (
+        select
             cluster_fk
             , sku_fk
             , workspace_id
@@ -85,13 +96,8 @@ with
             , total_price
             , machine_hours
             , extracted_at
-            , row_number() over (
-                partition by date_day, end_time, node_type 
-                order by extracted_at desc
-              ) as row_num
-        from joined
-        qualify row_num = 1
+        from dedup
     )
 
 select *
-from dedup
+from deduplicated
