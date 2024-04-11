@@ -25,10 +25,8 @@ models:
 
 seeds:
     databricks_billing:
-      +database: "{{ env_var('SNOWFLAKE_TEST_DATABASE') }}"
       +tags: integration_tests
-      +schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
 
 vars:
-  databricks_billing_database: "{{ env_var('SNOWFLAKE_TEST_DATABASE') }}"
-  databricks_billing_schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
+  databricks_billing_database:
+  databricks_billing_schema:
