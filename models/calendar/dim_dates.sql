@@ -16,7 +16,7 @@ with
             , dayofweek(date_day) as day_of_week
             , extract(month from date_day) as month
             , extract(quarter from date_day) as quarter
-            , extract(dayofyear from date_day) as day_of_year
+            , dayofyear(date_day) as day_of_year
             , extract(year from date_day) as year
             , to_char(date_day, 'DD-MM') AS month_day
         from dates_raw
