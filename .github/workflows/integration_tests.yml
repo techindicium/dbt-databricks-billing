@@ -36,12 +36,12 @@ jobs:
 
     - name: Integration Test - Snowflake
       run: |
-      cd integration_tests
-      dbt build --target snowflake --vars "
-      databricks_billing_database: $SNOWFLAKE_TEST_DATABASE
-      databricks_billing_schema: $SNOWFLAKE_TEST_SCHEMA
-      seeds:
-        databricks_billing:
-          +database: $SNOWFLAKE_TEST_DATABASE
-          +schema: $SNOWFLAKE_TEST_SCHEMA
-      "
+        cd integration_tests
+        dbt build --target snowflake --vars "
+        databricks_billing_database: $SNOWFLAKE_TEST_DATABASE
+        databricks_billing_schema: $SNOWFLAKE_TEST_SCHEMA
+        seeds:
+          databricks_billing:
+            +database: $SNOWFLAKE_TEST_DATABASE
+            +schema: $SNOWFLAKE_TEST_SCHEMA
+        "
