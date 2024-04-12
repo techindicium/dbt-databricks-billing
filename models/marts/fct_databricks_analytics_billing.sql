@@ -97,6 +97,7 @@ with
             , machine_hours
             , extracted_at
         from dedup
+        where row_num = 1
     )
 
 select *

@@ -14,11 +14,10 @@ with
         select
             cast(date_day as date) as date_day
             , dayofweek(date_day) as day_of_week
-            , extract(month from date_day) as month
-            , extract(quarter from date_day) as quarter
+            , month(date_day) as month
+            , quarter(date_day) as quarter
             , dayofyear(date_day) as day_of_year
-            , extract(year from date_day) as year
-            , to_char(date_day, 'DD-MM') AS month_day
+            , year(date_day) as year
         from dates_raw
     )
 
@@ -27,13 +26,13 @@ with
         select
             *
             , case
-                when day_of_week = 1 then 'Segunda-feira'
-                when day_of_week = 2 then 'Terça-feira'
-                when day_of_week = 3 then 'Quarta-feira'
-                when day_of_week = 4 then 'Quinta-feira'
-                when day_of_week = 5 then 'Sexta-feira'
-                when day_of_week = 6 then 'Sábado'
-                when day_of_week = 0 then 'Domingo'
+                when day_of_week = 1 then 'Domingo'
+                when day_of_week = 2 then 'Segunda-feira'
+                when day_of_week = 3 then 'Terça-feira'
+                when day_of_week = 4 then 'Quarta-feira'
+                when day_of_week = 5 then 'Quinta-feira'
+                when day_of_week = 6 then 'Sexta-feira'
+                when day_of_week = 7 then 'Sábado'
             end as nome_do_dia
             , case
                 when month = 1 then 'Janeiro'
@@ -78,13 +77,13 @@ with
                 else '2º Semestre'
             end as nome_semestre
             , case
-                when day_of_week = 1 then 'Monday'
-                when day_of_week = 2 then 'Tuesday'
-                when day_of_week = 3 then 'Wednesday'
-                when day_of_week = 4 then 'Thursday'
-                when day_of_week = 5 then 'Friday'
-                when day_of_week = 6 then 'Saturday'
-                when day_of_week = 0 then 'Sunday'
+                when day_of_week = 2 then 'Monday'
+                when day_of_week = 3 then 'Tuesday'
+                when day_of_week = 4 then 'Wednesday'
+                when day_of_week = 5 then 'Thursday'
+                when day_of_week = 6 then 'Friday'
+                when day_of_week = 7 then 'Saturday'
+                when day_of_week = 1 then 'Sunday'
             end as name_of_the_day
             , case
                 when month = 1 then 'January'
@@ -131,37 +130,6 @@ with
         from days_info
     )
 
-    , flags_cte as (
-        /*flags de feriado e dia util*/
-        select
-            *
-            , case
-                when month_day = '01-01' then true
-                when month_day = '21-04' then true
-                when month_day = '01-05' then true
-                when month_day = '07-09' then true
-                when month_day = '12-10' then true
-                when month_day = '02-11' then true
-                when month_day = '15-11' then true
-                when month_day = '25-12' then true
-                else false
-            end as fl_holiday
-            , case
-                when day_of_week in(6, 0) then false
-                when month_day = '01-01' then false
-                when month_day = '21-04' then false
-                when month_day = '01-05' then false
-                when month_day = '07-09' then false
-                when month_day = '12-10' then false
-                when month_day = '02-11' then false
-                when month_day = '15-11' then false
-                when month_day = '25-12' then false
-                else true
-            end as fl_business_day
-            , coalesce(day_of_week in(6, 0), false) as fl_weekend
-        from days_named
-    )
-
 /* reorganizando as colunas */
     , final_cte as (
         select
@@ -181,12 +149,9 @@ with
             , semester
             , nome_semestre
             , semester_name
-            , fl_holiday
-            , fl_business_day
-            , fl_weekend
             , day_of_year
             , year
-        from flags_cte
+        from days_named
     )
 
 select *
