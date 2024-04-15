@@ -1,0 +1,66 @@
+name: Integration Tests on Databricks Billing
+
+on:
+  push:
+    branches:
+      - feature/add-ci-cd
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWFLAKE_TEST_ACCOUNT: ${{ vars.SNOWFLAKE_TEST_ACCOUNT }}
+      SNOWFLAKE_TEST_USER: ${{ vars.SNOWFLAKE_TEST_USER }}
+      SNOWFLAKE_TEST_PASSWORD: ${{ secrets.SNOWFLAKE_TEST_PASSWORD }}
+      SNOWFLAKE_TEST_ROLE: ${{ vars.SNOWFLAKE_TEST_ROLE }}
+      SNOWFLAKE_TEST_DATABASE: ${{ vars.SNOWFLAKE_TEST_DATABASE }}
+      SNOWFLAKE_TEST_WAREHOUSE: ${{ vars.SNOWFLAKE_TEST_WAREHOUSE }}
+      SNOWFLAKE_TEST_SCHEMA: ${{ vars.SNOWFLAKE_TEST_SCHEMA }}
+
+      DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
+      DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
+      DATABRICKS_TEST_HOST: ${{ vars.DATABRICKS_TEST_HOST }}
+      DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
+      DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        cd integration_tests
+        pip install -r requirements.txt
+        dbt deps
+
+    - name: Integration Test - Snowflake
+      run: |
+        cd integration_tests
+        dbt build --target snowflake --vars "
+        databricks_billing_database: $SNOWFLAKE_TEST_DATABASE
+        databricks_billing_schema: $SNOWFLAKE_TEST_SCHEMA
+        seeds:
+          databricks_billing:
+            +database: $SNOWFLAKE_TEST_DATABASE
+            +schema: $SNOWFLAKE_TEST_SCHEMA
+        "
+      continue-on-error: true
+
+    - name: Integration Test - Databricks
+      run: |
+        cd integration_tests
+        dbt build --target databricks --vars "
+        databricks_billing_database: $DATABRICKS_TEST_CATALOG
+        databricks_billing_schema: $DATABRICKS_TEST_SCHEMA
+        seeds:
+          databricks_billing:
+            +database: $DATABRICKS_TEST_CATALOG
+            +schema: $DATABRICKS_TEST_SCHEMA
+        "
+      continue-on-error: true
