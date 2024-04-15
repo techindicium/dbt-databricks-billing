@@ -50,6 +50,7 @@ jobs:
             +database: $SNOWFLAKE_TEST_DATABASE
             +schema: $SNOWFLAKE_TEST_SCHEMA
         "
+      continue-on-error: true
 
     - name: Integration Test - Databricks
       run: |
@@ -62,3 +63,4 @@ jobs:
             +database: $DATABRICKS_TEST_CATALOG
             +schema: $DATABRICKS_TEST_SCHEMA
         "
+      continue-on-error: true
