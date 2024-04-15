@@ -18,10 +18,15 @@ jobs:
       SNOWFLAKE_TEST_WAREHOUSE: ${{ vars.SNOWFLAKE_TEST_WAREHOUSE }}
       SNOWFLAKE_TEST_SCHEMA: ${{ vars.SNOWFLAKE_TEST_SCHEMA }}
 
+      DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
+      DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
+      DATABRICKS_TEST_HOST: ${{ vars.DATABRICKS_TEST_HOST }}
+      DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
+      DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
+
     steps:
     - uses: actions/checkout@v2
-
-
+    
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
@@ -44,4 +49,16 @@ jobs:
           databricks_billing:
             +database: $SNOWFLAKE_TEST_DATABASE
             +schema: $SNOWFLAKE_TEST_SCHEMA
+        "
+
+    - name: Integration Test - Databricks
+      run: |
+        cd integration_tests
+        dbt build --target databricks --vars "
+        databricks_billing_database: $DATABRICKS_TEST_CATALOG
+        databricks_billing_schema: $DATABRICKS_TEST_SCHEMA
+        seeds:
+          databricks_billing:
+            +database: $DATABRICKS_TEST_CATALOG
+            +schema: $DATABRICKS_TEST_SCHEMA
         "
