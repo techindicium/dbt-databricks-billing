@@ -3,7 +3,7 @@ name: Integration Tests on Databricks Billing
 on:
   push:
     branches:
-      - feature/add-ci-cd
+      - main
 
 jobs:
   build:
