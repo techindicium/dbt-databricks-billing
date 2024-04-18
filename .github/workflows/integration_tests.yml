@@ -24,6 +24,9 @@ jobs:
       DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
       DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
 
+      BIGQUERY_TEST_PROJECT: ${{ vars.BIGQUERY_TEST_PROJECT }}
+      BIGQUERY_TEST_DATASET: ${{ vars.BIGQUERY_TEST_DATASET }}
+
     steps:
     - uses: actions/checkout@v2
     
@@ -64,3 +67,17 @@ jobs:
             +schema: $DATABRICKS_TEST_SCHEMA
         "
       continue-on-error: true
+
+    - name: Integration Test - Bigquery
+      run: |
+        cd integration_tests
+        dbt build --target bigquery --vars "
+        databricks_billing_database: $BIGQUERYTEST_PROJECT
+        databricks_billing_schema: $BIGQUERY_TEST_DATASET
+        seeds:
+          databricks_billing:
+            +database: $BIGQUERY_TEST_PROJECT
+            +schema: $BIGQUERY_TEST_DATASET
+        "
+      continue-on-error: true
+    

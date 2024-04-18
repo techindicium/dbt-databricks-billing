@@ -10,7 +10,6 @@ integration_tests:
       database: "{{ env_var('SNOWFLAKE_TEST_DATABASE') }}"
       warehouse: "{{ env_var('SNOWFLAKE_TEST_WAREHOUSE') }}"
       schema: "{{ env_var('SNOWFLAKE_TEST_SCHEMA') }}"
-      threads: 5
 
     databricks:
       type: databricks
@@ -19,3 +18,9 @@ integration_tests:
       host: "{{ env_var('DATABRICKS_TEST_HOST') }}"
       http_path: "{{ env_var('DATABRICKS_TEST_HTTP_PATH') }}"
       token: "{{ env_var('DATABRICKS_TEST_TOKEN') }}"
+
+    bigquery:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('BIGQUERY_TEST_PROJECT') }}"
+      dataset: "{{ env_var('BIGQUERY_TEST_DATASET') }}"
