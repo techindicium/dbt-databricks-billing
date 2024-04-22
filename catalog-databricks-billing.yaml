@@ -1,0 +1,30 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+ name: databricks_billing
+ description: |
+    Databricks Billing is a product destined to improve cost management, and it's built by a tap, a dbt package and a Power BI dashboard. It's designed to monitor Databricks platform usage data, which are measured in DBUs (unit of processing) and in dolars.
+ tags:
+   - product
+   - databricks
+   - costs
+   - powerbi
+ links:
+   - title: Wiki
+     url: https://wiki.indicium.tech/en/central_dados/squad_produtos_horizontais/squad_produtos_horizontais/databricks-billing
+   - title: Repository
+     url: https://github.com/techindicium/dbt-databricks-billing
+ annotations:
+   indicium.tech/product-url: https://app.powerbi.com/groups/1c5de32c-67f7-493c-ad6d-1d1c574b98bb/reports/b5486d7b-995a-4101-841b-bc6c8e7e64ce?ctid=40efe5ba-ccb1-47ee-8ed5-9e9dce942cbf&pbi_source=linkShare
+spec:
+ title: Databricks Billing
+ team: Produtos Horizontais
+ class: Técnico
+ vertical: Monitoring
+ businessUnit: TI
+ interface: Dashboard
+ language: Portuguese
+ owner: Indicium
+ type: product
+ lifecycle: experimental
+ system: public-websites
