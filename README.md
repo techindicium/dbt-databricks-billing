@@ -1,6 +1,15 @@
 # Databricks Billing
 This package was built to help you monitor the costs involved in using Databricks as a data plataform. It makes it easier to keep up with the costs related to DBUs and clusters.
 
+## Before creating a branch
+
+Pay attention, it is very important to know if your modification to this repository is a release (breaking changes), a feature (functionalities) or a patch(to fix bugs). With that information, create your branch name like this:
+
+- `release/<branch-name>`
+- `feature/<branch-name>`
+- `patch/<branch-name>`
+
+
 # Revisions
 0.3.0 - For Snowflake warehouses
 0.3.1 - For Databricks warehouses
