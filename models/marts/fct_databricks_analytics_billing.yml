@@ -4,47 +4,108 @@ models:
   - name: fct_databricks_analytics_billing
     description: Information about the DBUs used, machine hours and costs related to Databricks
     columns:
+      - name: databricks_monitoring_sk
+        description: Unique identifier for the record.
+        data_test:
+          - unique
+          - not_null
+      - name: warehouse_fk
+        description: Foreign key to the dim_databricks_analytics_warehouses table.
+        data_test:
+          - relationships:
+              to: ref('dim_databricks_analytics_warehouses')
+              field: warehouse_sk
       - name: cluster_fk
-        description: Foreign key of the clusters
-
-      - name: sku_fk
-        description: Foreign key of the skus
-
+        description: Foreign key to the dim_databricks_analytics_clusters table.
+        data_test:
+          - relationships:
+              to: ref('dim_databricks_analytics_clusters')
+              field: warehouse_sk
+      - name: account_id
+        description: Unique identifier of the account.
       - name: workspace_id
-        description: ID of the workspace
-
-      - name: cluster_id 
-        description: Identification of the cluster
-
-      - name: owner_id
-        description: ID of the user who created the cluster/warehouse
-     
-      - name: cluster_name
-        description: User-provided name for the cluster/warehouse
-     
-      - name: node_type
-        description: Instance type of the cluster/warehouse
-
-      - name: custom_tags
-        description: Custom tags associated with the cluster/warehouse during this hour
-
-      - name: sku 
-        description: The type of the billing SKU
-
-      - name: data_dia
-        description: Date related to dim_dates
-
-      - name: end_time
-        description: End of the hour for the provided usage
-
-      - name: dbus
-        description: Number of DBUs used by the user during this hour
-
-      - name: dbus_unit_price
-        description: The price of one DBU
-
-      - name: total_price
-        description: The unit price of the DBU multiplied by the DBUs used
-
+        description: Unique identifier of the workspace.
+      - name: record_id
+        description: Unique identifier of the record.
+      - name: sku
+        description: The sku of the Databricks product used.
+      - name: cloud
+        description: The cloud provider used.
+      - name: start_datetime
+        description: The start date and time of the usage record.
+      - name: end_datetime
+        description: The end date and time of the usage record.
+      - name: usage_date
+        description: The date of the usage record.
       - name: machine_hours
-        description: Total number of machine hours used by all containers in the cluster/warehouse
+        description: The number of machine hours used.
+      - name: custom_tags
+        description: The custom tags associated with the usage record.
+      - name: dbu_unit
+        description: The unit of measure for the DBUs used.
+      - name: dbus
+        description: The number of DBUs used.
+      - name: cluster_id
+        description: Unique identifier of the cluster.
+      - name: cluster_name
+        description: >
+         The name of the cluster. This column checks if the cluster_name exists in the dim_databricks_analytics_clusters table,
+         if not, checks warehouse_name in the dim_databricks_analytics_warehouses table, if not, gets the id of the cluster or the warehouse.
+      - name: job_id
+        description: Unique identifier of the job.
+      - name: warehouse_id
+        description: Unique identifier of the warehouse.
+      - name: instance_pool_id
+        description: Unique identifier of the instance pool.
+      - name: node_type
+        description: The type of node used.
+      - name: job_run_id
+        description: Unique identifier of the job run.
+      - name: notebook_id
+        description: Unique identifier of the notebook.
+      - name: dlt_pipeline_id
+        description: Unique identifier of the DLT pipeline.
+      - name: endpoint_name
+        description: The name of the endpoint.
+      - name: endpoint_id
+        description: Unique identifier of the endpoint.
+      - name: dlt_update_id
+        description: Unique identifier of the DLT update.
+      - name: dlt_maintenance_id
+        description: Unique identifier of the DLT maintenance.
+      - name: identity_involved_usage
+        description: The identity involved in the usage record.
+      - name: record_type
+        description: The type of record.
+      - name: ingestion_date
+        description: The date of ingestion of the record.
+      - name: billing_origin_product
+        description: The origin of the billing product.
+      - name: jobs_tier
+        description: The tier of the jobs product.
+      - name: sql_tier
+        description: The tier of the SQL product.
+      - name: dlt_tier
+        description: The tier of the DLT product.
+      - name: is_serverless
+        description: Whether the usage is serverless or not.
+      - name: is_photon
+        description: Whether the usage is photon or not.
+      - name: serving_type
+        description: The type of serving used.
+      - name: usage_type
+        description: The type of usage used.
+      - name: default_price
+        description: The default price of the product.
+      - name: promotional_price
+        description: The promotional price of the product.
+      - name: effective_price
+        description: The effective price of the product.
+      - name: total_cost
+        description: The total cost of the usage record.
+      - name: simple_projection_cost
+        description: > 
+         The cost of the usage record projected to the end of the month is calculated by dividing the current price
+         by the number of days that have passed so far, then multiplying the result by the total number of days in 
+         the month. This gives an estimate of what the total cost will be by the end of the month, assuming the 
+         usage rate remains consistent.

@@ -1,0 +1,31 @@
+version: 2
+ 
+models:
+  - name: dim_databricks_analytics_sku_pricing
+    description: Information about the sku's existent on the table Databricks Billing
+    columns:
+      - name: sku_pricing_sk
+        description: Surrogate key for the sku pricing table
+        data_tests:
+          - not_null
+          - unique
+      - name: account_id
+        description: Account id associated with the sku pricing
+      - name: price_start_time
+        description: Start time of the pricing period
+      - name: price_end_time
+        description: End time of the pricing period
+      - name: sku
+        description: SKU name
+      - name: cloud
+        description: Cloud name (e.g. AWS, GCP)
+      - name: currency_code
+        description: Currency code associated with the pricing
+      - name: dbu_unit
+        description: Unit of measure for the pricing (e.g. Databricks Units)
+      - name: dbus_default_unit_price
+        description: Default price for the sku in the pricing period
+      - name: dbus_promotional_unit_price
+        description: Promotional price for the sku in the pricing period
+      - name: dbus_effective_unit_price
+        description: Effective price for the sku in the pricing period (takes into account promotions)
