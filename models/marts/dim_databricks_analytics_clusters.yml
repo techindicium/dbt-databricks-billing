@@ -1,7 +1,7 @@
 version: 2
  
 models:
-  - name: dim_databricks_analytics_cluster
+  - name: dim_databricks_analytics_clusters
     description: Information about the clusters of Databricks.
     columns:
       - name: cluster_sk
