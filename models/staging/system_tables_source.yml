@@ -1,0 +1,73 @@
+version: 2
+sources:
+  - name: raw_system_tables_databricks
+    database: system
+    schema: billing
+    description: Raw information from the databricks billing table
+    tables:
+      - name: usage
+        description: Table with information from databricks usage and billing
+        columns:
+          - name: record_id
+            description: Unique identifier for this record
+            data_test:
+              - unique
+              - not_null
+          - name: account_id
+            description: ID of the account this report was generated for
+          - name: workspace_id
+            description: ID of the Workspace this usage was associated with
+          - name: sku_name
+            description: Name of the SKU
+          - name: cloud
+            description: Cloud this usage is relevant for. Possible values are AWS, AZURE, and GCP.
+          - name: usage_start_time
+            description: The start time relevant to this usage record. Timezone information is recorded at the end of the value with +00:00 representing UTC timezone.
+          - name: usage_end_time
+            description: The end time relevant to this usage record. Timezone information is recorded at the end of the value with +00:00 representing UTC timezone.
+          - name: usage_date
+            description: Date of the usage record, this field can be used for faster aggregation by date
+          - name: custom_tags
+            description: Tags applied by the users to this usage. Includes compute resource tags and jobs tags.
+          - name: usage_unit
+            description: Unit this usage is measured in. Possible values include DBUs.
+          - name: usage_quantity
+            description: Number of units consumed for this record.
+          - name: usage_metadata
+            description: System-provided metadata about the usage, including IDs for compute resources and jobs (if applicable).
+          - name: identity_metadata
+            description: System-provided metadata about the identities involved in the usage. 
+          - name: record_type
+            description: Whether the record is a correction. Possible values are ORIGINAL, RETRACTION, and RESTATEMENT.
+          - name: ingestion_date
+            description: Date the record was ingested into the usage table.
+          - name: billing_origin_product
+            description: The product that originated the usage. Some products can be billed as different SKUs.
+          - name: product_features
+            description: Details about the specific product features used.
+          - name: usage_type
+            description: The type of usage attributed to the product or workload for billing purposes. Possible values are COMPUTE_TIME, STORAGE_SPACE, NETWORK_BYTES, API_CALLS, TOKEN, or GPU_TIME.
+    
+      - name: list_prices
+        description: The pricing table gives you access to a historical log of SKU pricing.
+        columns:
+          - name: price_start_time
+            description: The time this price became effective in UTC
+          - name: price_end_time
+            description: The time this price stopped being effective in UTC
+          - name: account_id
+            description: ID of the account this report was generated for
+          - name: sku_name
+            description: Name of the SKU
+          - name: cloud
+            description: Name of the Cloud this price is applicable to. Possible values are AWS, AZURE, and GCP.
+          - name: currency_code
+            description: The currency this price is expressed in
+          - name: usage_unit
+            description: The unit of measurement that is monetized.
+          - name: pricing
+            description: >
+              A structured data field that includes pricing info at the published list price rate. 
+              The key default will always return a single price that can be used for simple long-term estimates. 
+              The key promotional represents a temporary promotional price. 
+              The key effective_list resolves list and promotional price, and contains the effective list price used for calculating the cost. 

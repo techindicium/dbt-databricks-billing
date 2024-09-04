@@ -1,0 +1,55 @@
+version: 2
+ 
+models:
+  - name: dim_databricks_analytics_clusters
+    description: Information about the clusters of Databricks.
+    columns:
+      - name: cluster_sk
+        description: Primary key of the table
+        data_tests:
+          - unique
+          - not_null
+      - name: cluster_id
+        description: Unique identifier of the cluster
+      - name: cluster_name
+        description: Name of the cluster
+      - name: cluster_source
+        description: Source of the cluster
+      - name: creator_user_name
+        description: Name of the user who created the cluster
+      - name: autotermination_minutes
+        description: Number of minutes the cluster will wait for a job to run before terminating
+      - name: driver_node_type_id
+        description: Node type of the driver
+      - name: enable_elastic_disk
+        description: Whether the cluster is using elastic disk
+      - name: enable_local_disk_encryption
+        description: Whether the cluster is using local disk encryption
+      - name: init_scripts_safe_mode
+        description: Whether the cluster is using safe mode for init scripts
+      - name: instance_node_type_id
+        description: Node type of the instances
+      - name: last_state_loss_time
+        description: Date of the last time the cluster entered a state loss
+      - name: node_type_id
+        description: Node type of the cluster
+      - name: num_workers
+        description: Number of workers in the cluster
+      - name: spark_context_id
+        description: ID of the Spark context
+      - name: spark_version
+        description: Version of Spark
+      - name: start_time
+        description: Date when the cluster was started
+      - name: cluster_state
+        description: State of the cluster
+      - name: state_message
+        description: Message describing the state of the cluster
+      - name: terminated_time
+        description: Date when the cluster was terminated
+      - name: termination_reason_code
+        description: Code of the reason why the cluster was terminated
+      - name: termination_reason_type
+        description: Type of the reason why the cluster was terminated
+      - name: inserted_date
+        description: Date when the information was inserted in the table

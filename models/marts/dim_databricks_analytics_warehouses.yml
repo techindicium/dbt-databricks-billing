@@ -1,0 +1,56 @@
+version: 2
+
+models:
+  - name: dim_databricks_analytics_warehouses
+    description: Dimension containing information about Databricks warehouses.
+    columns:
+      - name: warehouse_sk
+        description: Surrogate key for the table.
+        data_tests:
+          - unique
+          - not_null
+      - name: warehouse_id
+        description: Unique identifier for the warehouse.
+      - name: auto_resume
+        description: Whether the cluster should be automatically restarted.
+      - name: auto_stop_mins
+        description: Time in minutes for the cluster to be automatically stopped.
+      - name: channel_name
+        description: Channel of the warehouse.
+      - name: cluster_size
+        description: Size of the cluster.
+      - name: creator_id
+        description: Identifier of the warehouse creator.
+      - name: creator_user
+        description: Name of the creator user.
+      - name: creator_email
+        description: Email of the creator user.
+      - name: enable_photon
+        description: Whether the warehouse is enabled for Photon.
+      - name: enable_serverless_compute
+        description: Whether the warehouse is enabled for serverless compute.
+      - name: jdbc_url
+        description: JDBC URL of the warehouse.
+      - name: max_num_clusters
+        description: Maximum number of clusters.
+      - name: min_num_clusters
+        description: Minimum number of clusters.
+      - name: warehouse_name
+        description: Name of the warehouse.
+      - name: is_serverless
+        description: Whether the warehouse is serverless.
+      - name: num_active_sessions
+        description: Number of active sessions.
+      - name: num_clusters
+        description: Number of clusters.
+      - name: warehouse_size
+        description: Size of the warehouse.
+      - name: spot_instance_policy
+        description: Policy of spot instances.
+      - name: warehouse_state
+        description: State of the warehouse.
+      - name: warehouse_type
+        description: Type of the warehouse.
+      - name: inserted_date
+        description: Insertion date.
+

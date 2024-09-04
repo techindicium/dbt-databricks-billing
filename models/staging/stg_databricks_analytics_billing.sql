@@ -1,64 +1,51 @@
 with
-    renamed as (
-        select
-            workspaceid as workspace_id
-            , clusterid as cluster_id
-            , clusterowneruserid owner_id
-            , cast(clustername as string) as cluster_name
-            , cast(timestamp as date) as end_date
-            , substring(timestamp, 12, 8) as end_time
-            , cast(clusternodetype as string) as node_type
-            , cast(clustercustomtags as string) as custom_tags
-            , cast(sku as string) as sku
-            , round(dbus,2) as dbus
-            , round(machinehours,2) as machine_hours
-            , _SDC_EXTRACTED_AT as extracted_at
-        from {{ source('raw_databricks', 'billing') }}
+    source as (
+        select * 
+        from {{ source('raw_system_tables_databricks', 'usage') }}
     )
 
-    , case_when as (
-        select
-            workspace_id
-            , cluster_id
-            , owner_id
-            , cluster_name
-            , end_date
-            , end_time
-            , node_type
+    , renamed as (
+        select 
+            cast(account_id as string) as account_id
+            , cast(workspace_id as string) as workspace_id
+            , cast(record_id as string) as record_id
+            , cast(sku_name as string) as sku
+            , cast(cloud as string) as cloud
+            , cast(usage_start_time as timestamp) as start_datetime
+            , cast(usage_end_time as timestamp) as end_datetime
+            , cast(usage_date as date) as usage_date
+            , datediff(HOUR, usage_end_time, usage_start_time) as machine_hours
             , custom_tags
-            , sku
-            , dbus
-            , case
-                  when sku = 'STANDARD_ALL_PURPOSE_COMPUTE' then 0.55
-                  when sku = 'STANDARD_DLT_CORE_COMPUTE' then 0.20
-                  when sku = 'STANDARD_DLT_ADVANCED_COMPUTE' then 0.36
-                  when sku = 'STANDARD_JOBS_COMPUTE' then 0.15
-                  when sku = 'STANDARD_ALL_PURPOSE_COMPUTE_(PHOTON)' then 0.55
-                  else null
-            end as dbus_unit_price
-            , machine_hours
-            , extracted_at
-        from renamed
+            , cast(usage_unit as string) as dbu_unit
+            , round(usage_quantity, 2) as dbus
+            , usage_metadata.cluster_id as cluster_id
+            , usage_metadata.job_id as job_id
+            , usage_metadata.warehouse_id as warehouse_id
+            , usage_metadata.instance_pool_id as instance_pool_id
+            , usage_metadata.node_type as node_type
+            , usage_metadata.job_run_id as job_run_id
+            , usage_metadata.notebook_id as notebook_id
+            , usage_metadata.dlt_pipeline_id as dlt_pipeline_id
+            , usage_metadata.endpoint_name as endpoint_name
+            , usage_metadata.endpoint_id as endpoint_id
+            , usage_metadata.dlt_update_id as dlt_update_id
+            , usage_metadata.dlt_maintenance_id as dlt_maintenance_id
+            , identity_metadata.run_as as identity_involved_usage
+            , cast(record_type as string) as record_type
+            , cast(ingestion_date as date) as ingestion_date
+            , cast(billing_origin_product as string) as billing_origin_product
+            , product_features.jobs_tier as jobs_tier
+            , product_features.sql_tier as sql_tier
+            , product_features.dlt_tier as dlt_tier
+            , case 
+                when sku_name like '%SERVERLESS%' then true
+                else product_features.is_serverless
+            end as is_serverless
+            , product_features.is_photon as is_photon
+            , product_features.serving_type as serving_type
+            , cast(usage_type as string) as usage_type        
+        from source
     )
 
-    , calculate as (
-        select
-            workspace_id
-            , cluster_id
-            , owner_id
-            , cluster_name
-            , end_date
-            , end_time
-            , node_type
-            , custom_tags
-            , sku
-            , dbus
-            , dbus_unit_price
-            , (dbus * dbus_unit_price) as total_price
-            , machine_hours
-            , extracted_at
-        from case_when
-    )
-
-select *
-from calculate
+select * 
+from renamed

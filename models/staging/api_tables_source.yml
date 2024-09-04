@@ -1,0 +1,111 @@
+version: 2
+sources:
+  - name: raw_api_tables_databricks
+    database: "{{ var('databricks_billing_database') }}"
+    schema: "{{ var('databricks_billing_schema') }}"
+    description: >
+      Raw information about databricks clusters and warehouses. These tables are created by the Databricks
+      REST API.
+    tables:
+      - name: warehouses
+        description: The warehouses table contains information about the warehouses created in Databricks.
+        columns:
+          - name: auto_resume
+            description: Whether auto-resume is enabled for this warehouse
+          - name: auto_stop_mins
+            description: >
+               The amount of time in minutes that a SQL warehouse must be idle (i.e., no RUNNING queries) 
+               before it is automatically stopped.
+          - name: channel
+            description: Channel Details
+          - name: cluster_size
+            description: >
+              Size of the clusters allocated for this warehouse. Increasing the size of a spark cluster allows you 
+              to run larger queries on it. If you want to increase the number of concurrent queries, 
+              please tune max_num_clusters.
+          - name: creator_id
+            description: Warehouse creator id
+          - name: creator_name
+            description: Warehouse creator name
+          - name: enable_photon
+            description: Configures whether the warehouse should use Photon optimized clusters.
+          - name: enable_serverless_compute
+            description: >
+              Configures whether the warehouse should use serverless compute. 
+              Databricks strongly recommends that you always explicitly set this field.
+          - name: id
+            description: Unique identifier for warehouse
+            data_test:
+              - not_null
+          - name: jdbc_url
+            description: The jdbc connection string for this warehouse
+          - name: max_num_clusters
+            description: Maximum number of clusters that the autoscaler will create to handle concurrent queries.
+          - name: min_num_clusters
+            description: >
+             Minimum number of available clusters that will be maintained for this SQL warehouse. 
+             Increasing this will ensure that a larger number of clusters are always running and
+              therefore may reduce the cold start time for new queries.
+          - name: name
+            description: The name of the warehouse
+          - name: num_active_sessions
+            description: Current number of active sessions for the warehouse
+          - name: num_clusters
+            description: Current number of clusters running for the service
+          - name: size
+            description: The size of the cluster associated with this warehouse
+          - name: spot_instance_policy
+            description: Configurations whether the warehouse should use spot instances.
+          - name: state
+            description: The state of the warehouse
+          - name: warehouse_type
+            description: The type of warehouse
+          - name: inserteddate
+            description: The date this warehouse was inserted into the table
+      - name: clusters
+        description: The clusters table contains information about the clusters created in Databricks.
+        columns:
+          - name: cluster_id
+            description: Unique identifier for this cluster
+            data_test:
+              - not_null
+          - name: cluster_source
+            description: The source of the cluster
+          - name: cluster_name
+            description: Name of the cluster
+          - name: creator_user_name
+            description: Creator of the cluster
+          - name: autotermination_minutes
+            description: Autotermination time in minutes
+          - name: driver_node_type_id
+            description: Node type of the driver
+          - name: enable_elastic_disk
+            description: Configures whether the cluster should use elastic disk
+          - name: enable_local_disk_encryption
+            description: Configures whether the cluster should use local disk encryption
+          - name: init_scripts_safe_mode
+            description: Configures whether the cluster should use safe mode
+          - name: instance_source
+            description: The source of the instance
+          - name: last_state_loss_time
+            description: Time of last state loss
+          - name: node_type_id
+            description: Node type of the cluster
+          - name: num_workers
+            description: Number of workers in the cluster
+          - name: spark_context_id
+            description: The spark context id of the cluster
+          - name: spark_version
+            description: The spark version of the cluster
+          - name: start_time
+            description: The start time of the cluster
+          - name: state
+            description: The state of the cluster
+          - name: state_message
+            description: The message of the state
+          - name: terminated_time
+            description: The terminated time of the cluster
+          - name: termination_reason
+            description: The reason for termination
+          - name: inserteddate
+            description: The date this cluster was inserted into the table
