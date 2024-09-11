@@ -10,6 +10,7 @@ on:
 
 env:
     DBT_PROFILES_DIR: ${{ github.workspace }}/integration_tests
+    DBT_PROJECT_DIR: ${{ github.workspace }}/integration_tests
     DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
     DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
     DATABRICKS_TEST_HOST: ${{ vars.DATABRICKS_TEST_HOST }}
