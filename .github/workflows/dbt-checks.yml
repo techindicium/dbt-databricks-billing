@@ -9,6 +9,7 @@ on:
       - main   
 
 env:
+    DBT_DEFAULT_TARGET: databricks
     DBT_PROFILES_DIR: ${{ github.workspace }}/integration_tests
     DBT_PROJECT_DIR: ${{ github.workspace }}/integration_tests
     DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }} 
