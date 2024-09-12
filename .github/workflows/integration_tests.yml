@@ -30,7 +30,7 @@ env:
   DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
 
 jobs:
-  build:
+  integration-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,11 +50,9 @@ jobs:
 
     - name: Integration Test - Snowflake
       run: |
-        dbt seed --target snowflake
-
         dbt test -s source:* --target snowflake
 
-        dbt build --exclude-resource-type seed --target snowflake --vars "
+        dbt build --target snowflake --vars "
         databricks_billing_database: $SNOWFLAKE_TEST_DATABASE
         databricks_billing_schema: $SNOWFLAKE_TEST_SCHEMA
         "
