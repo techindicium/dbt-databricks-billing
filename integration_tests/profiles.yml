@@ -1,5 +1,5 @@
 integration_tests:
-  target: snowflake
+  target: "{{ env_var('DBT_DEFAULT_TARGET', 'databricks')}}"
   outputs:
     snowflake:
       type: snowflake
