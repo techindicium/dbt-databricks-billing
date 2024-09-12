@@ -41,15 +41,11 @@ jobs:
       with:
         python-version: 3.8
 
-    - name: cd integration_tests
-      run: |
-        cd integration_tests/
-        pwd
-
     - name: Install dependencies
       run: |
+        cd integration_tests/
         python -m pip install --upgrade pip
-        pip install -r $(pwd)/requirements.txt
+        pip install -r requirements.txt
         dbt deps
 
     - name: Integration Test - Snowflake
