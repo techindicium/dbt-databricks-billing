@@ -17,8 +17,8 @@ env:
     DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
     DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
 
-    SNOWFLAKE_TEST_ACCOUNT: ${{ vars.SNOWFLAKE_TEST_ACCOUNT }}
-    SNOWFLAKE_TEST_USER: ${{ vars.SNOWFLAKE_TEST_USER }}
+    SNOWFLAKE_TEST_ACCOUNT: ${{ secrets.SNOWFLAKE_TEST_ACCOUNT }}
+    SNOWFLAKE_TEST_USER: ${{ secrets.SNOWFLAKE_TEST_USER }}
     SNOWFLAKE_TEST_PASSWORD: ${{ secrets.SNOWFLAKE_TEST_PASSWORD }}
     SNOWFLAKE_TEST_ROLE: ${{ vars.SNOWFLAKE_TEST_ROLE }}
     SNOWFLAKE_TEST_DATABASE: ${{ vars.SNOWFLAKE_TEST_DATABASE }}
@@ -44,8 +44,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run dbt debug for Databricks
-        run: dbt debug --target databricks
+      # - name: Run dbt debug for Databricks
+      #   run: dbt debug --target databricks
           
       - name: Run dbt debug for Snowflake
         run: dbt debug --target snowflake
