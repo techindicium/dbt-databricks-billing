@@ -1,5 +1,5 @@
 integration_tests:
-  target: snowflake
+  target: databricks
   outputs:
     snowflake:
       type: snowflake

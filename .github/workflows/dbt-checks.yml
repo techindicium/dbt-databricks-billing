@@ -11,10 +11,10 @@ on:
 env:
     DBT_PROFILES_DIR: ${{ github.workspace }}/integration_tests
     DBT_PROJECT_DIR: ${{ github.workspace }}/integration_tests
-    DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
-    DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
-    DATABRICKS_TEST_HOST: ${{ vars.DATABRICKS_TEST_HOST }}
-    DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
+    DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }} 
+    DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }} 
+    DATABRICKS_TEST_HOST: ${{ secrets.DATABRICKS_TEST_HOST }} 
+    DATABRICKS_TEST_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }} 
     DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
 
     SNOWFLAKE_TEST_ACCOUNT: ${{ secrets.SNOWFLAKE_TEST_ACCOUNT }}
@@ -42,10 +42,10 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r ${{ github.workspace }}/integration_tests/requirements.txt
 
-      # - name: Run dbt debug for Databricks
-      #   run: dbt debug --target databricks
+      - name: Run dbt debug for Databricks
+        run: dbt debug --target databricks
           
       - name: Run dbt debug for Snowflake
         run: dbt debug --target snowflake
