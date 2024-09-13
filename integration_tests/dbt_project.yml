@@ -26,7 +26,3 @@ models:
 seeds:
     databricks_billing:
       +tags: integration_tests
-
-vars:
-  databricks_billing_database: cdi_main
-  databricks_billing_schema: dag_monitoring

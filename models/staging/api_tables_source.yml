@@ -1,8 +1,8 @@
 version: 2
 sources:
   - name: raw_api_tables_databricks
-    database: "{{ var('databricks_billing_database') }}"
-    schema: "{{ var('databricks_billing_schema') }}"
+    database: "{{ var('databricks_billing_database', target.database) }}"
+    schema: "{{ var('databricks_billing_schema', target.schema) }}"
     description: >
       Raw information about databricks clusters and warehouses. These tables are created by the Databricks
       REST API.
