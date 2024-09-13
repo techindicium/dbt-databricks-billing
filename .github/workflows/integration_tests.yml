@@ -17,8 +17,8 @@ env:
   DATABRICKS_TEST_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
   DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
   DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
-  DATABRICKS_TEST_SCHEMA: dbt_ci_${{ github.ref_name }}_${{ github.run_number }}
-  CLEANED_BRANCH: "${{ github.ref_name }}"
+  GITHUB_REF_NAME: ${{ github.ref_name }}
+  GITHUB_RUN_NUMBER: ${{ github.run_number }}
 
 jobs:
   integration-tests:
@@ -37,10 +37,16 @@ jobs:
         cd integration_tests/
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+        export DATABRICKS_TEST_SCHEMA=$(echo "dbt_ci_${GITHUB_REF_NAME}_${GITHUB_RUN_NUMBER}" | sed 's;/;_;g' | sed 's/-/_/g')
+        export CLEANED_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's;/;_;g' | sed 's/-/_/g')
         dbt deps
 
     - name: Integration Test - Databricks Billing
       run: |
+      
+        export DATABRICKS_TEST_SCHEMA=$(echo "dbt_ci_${GITHUB_REF_NAME}_${GITHUB_RUN_NUMBER}" | sed 's;/;_;g' | sed 's/-/_/g')
+        export CLEANED_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's;/;_;g' | sed 's/-/_/g')
+
         dbt seed 
 
         dbt run-operation warehouses
@@ -51,4 +57,4 @@ jobs:
 
         dbt build --exclude-resource-type seed 
 
-        dbt run-operation drop_schemas_dev --args '{pattern: dbt_ci_"${GITHUB_REF_NAME}"_*}'
+        dbt run-operation drop_schemas_dev --args '{pattern: dbt_ci_'"$CLEANED_BRANCH"'_*}'
