@@ -1,6 +1,6 @@
 {% macro warehouses() %}
 {% set create_table %}
-create or replace table `{{ var('databricks_billing_database') }}`.{{ var('databricks_billing_schema') }}.warehouses (
+create or replace table {{ target.database }}.{{ target.schema }}.warehouses (
     auto_resume BOOLEAN,
     auto_stop_mins BIGINT,
     channel STRUCT<name STRING>,
@@ -31,7 +31,7 @@ create or replace table `{{ var('databricks_billing_database') }}`.{{ var('datab
 {% endset %}
 
 {% set insert_table %}
-INSERT INTO `{{ var('databricks_billing_database') }}`.{{ var('databricks_billing_schema') }}.warehouses VALUES
+INSERT INTO {{ target.database }}.{{ target.schema }}.warehouses VALUES
 (
     CAST(true AS BOOLEAN),
     CAST(10 AS BIGINT),
