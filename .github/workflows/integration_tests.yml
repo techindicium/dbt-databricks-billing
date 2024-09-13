@@ -17,7 +17,8 @@ env:
   DATABRICKS_TEST_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
   DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
   DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
-  DATABRICKS_TEST_SCHEMA: $(echo "dbt_ci_${BITBUCKET_BRANCH}_${BITBUCKET_BUILD_NUMBER}"|sed 's;/;_;g'|sed 's/-/_/g')
+  DATABRICKS_TEST_SCHEMA: dbt_ci_${{ github.ref_name }}_${{ github.run_number }}
+  CLEANED_BRANCH: "${{ github.ref_name }}"
 
 jobs:
   integration-tests:
@@ -42,12 +43,12 @@ jobs:
       run: |
         dbt seed 
 
-        dbt run-operation warehouses 
+        dbt run-operation warehouses
+
+        dbt run-operation clusters
 
         dbt test -s source:* 
 
-        dbt build --exclude-resource-type seed
+        dbt build --exclude-resource-type seed 
 
-        export CLEANED_BRANCH=$(echo "${BITBUCKET_BRANCH}"|sed 's;/;_;g'|sed 's/-/_/g') 
-
-        dbt run-operation drop_schemas_dev --args '{pattern: dbt_ci_'"$CLEANED_BRANCH"'_*}'
+        dbt run-operation drop_schemas_dev --args '{pattern: dbt_ci_"${GITHUB_REF_NAME}"_*}'
