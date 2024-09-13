@@ -1,28 +1,28 @@
-name: Integration Tests on Databricks Billing
+name: Integration Tests, CI
 
 on:
-  push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
     branches:
-      - main
+      - main   
+
+env:
+  DBT_DEFAULT_TARGET: databricks
+  DBT_PROFILES_DIR: ${{ github.workspace }}/integration_tests
+  DBT_PROJECT_DIR: ${{ github.workspace }}/integration_tests
+
+  DATABRICKS_TEST_HOST: ${{ secrets.DATABRICKS_TEST_HOST }}
+  DATABRICKS_TEST_HTTP_PATH: ${{ secrets.DATABRICKS_HTTP_PATH }}
+  DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
+  DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
+  GITHUB_REF_NAME: ${{ github.ref_name }}
+  GITHUB_RUN_NUMBER: ${{ github.run_number }}
 
 jobs:
-  build:
+  integration-tests:
     runs-on: ubuntu-latest
-
-    env:
-      SNOWFLAKE_TEST_ACCOUNT: ${{ vars.SNOWFLAKE_TEST_ACCOUNT }}
-      SNOWFLAKE_TEST_USER: ${{ vars.SNOWFLAKE_TEST_USER }}
-      SNOWFLAKE_TEST_PASSWORD: ${{ secrets.SNOWFLAKE_TEST_PASSWORD }}
-      SNOWFLAKE_TEST_ROLE: ${{ vars.SNOWFLAKE_TEST_ROLE }}
-      SNOWFLAKE_TEST_DATABASE: ${{ vars.SNOWFLAKE_TEST_DATABASE }}
-      SNOWFLAKE_TEST_WAREHOUSE: ${{ vars.SNOWFLAKE_TEST_WAREHOUSE }}
-      SNOWFLAKE_TEST_SCHEMA: ${{ vars.SNOWFLAKE_TEST_SCHEMA }}
-
-      DATABRICKS_TEST_CATALOG: ${{ vars.DATABRICKS_TEST_CATALOG }}
-      DATABRICKS_TEST_SCHEMA: ${{ vars.DATABRICKS_TEST_SCHEMA }}
-      DATABRICKS_TEST_HOST: ${{ vars.DATABRICKS_TEST_HOST }}
-      DATABRICKS_TEST_HTTP_PATH: ${{ vars.DATABRICKS_TEST_HTTP_PATH }}
-      DATABRICKS_TEST_TOKEN: ${{ secrets.DATABRICKS_TEST_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
@@ -34,33 +34,27 @@ jobs:
 
     - name: Install dependencies
       run: |
+        cd integration_tests/
         python -m pip install --upgrade pip
-        cd integration_tests
         pip install -r requirements.txt
+        export DATABRICKS_TEST_SCHEMA=$(echo "dbt_ci_${GITHUB_REF_NAME}_${GITHUB_RUN_NUMBER}" | sed 's;/;_;g' | sed 's/-/_/g')
+        export CLEANED_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's;/;_;g' | sed 's/-/_/g')
         dbt deps
 
-    - name: Integration Test - Snowflake
+    - name: Integration Test - Databricks Billing
       run: |
-        cd integration_tests
-        dbt build --target snowflake --vars "
-        databricks_billing_database: $SNOWFLAKE_TEST_DATABASE
-        databricks_billing_schema: $SNOWFLAKE_TEST_SCHEMA
-        seeds:
-          databricks_billing:
-            +database: $SNOWFLAKE_TEST_DATABASE
-            +schema: $SNOWFLAKE_TEST_SCHEMA
-        "
-      continue-on-error: true
+      
+        export DATABRICKS_TEST_SCHEMA=$(echo "dbt_ci_${GITHUB_REF_NAME}_${GITHUB_RUN_NUMBER}" | sed 's;/;_;g' | sed 's/-/_/g')
+        export CLEANED_BRANCH=$(echo "${GITHUB_REF_NAME}" | sed 's;/;_;g' | sed 's/-/_/g')
 
-    - name: Integration Test - Databricks
-      run: |
-        cd integration_tests
-        dbt build --target databricks --vars "
-        databricks_billing_database: $DATABRICKS_TEST_CATALOG
-        databricks_billing_schema: $DATABRICKS_TEST_SCHEMA
-        seeds:
-          databricks_billing:
-            +database: $DATABRICKS_TEST_CATALOG
-            +schema: $DATABRICKS_TEST_SCHEMA
-        "
-      continue-on-error: true
+        dbt seed 
+
+        dbt run-operation warehouses
+
+        dbt run-operation clusters
+
+        dbt test -s source:* 
+
+        dbt build --exclude-resource-type seed 
+
+        dbt run-operation drop_schemas_dev --args '{pattern: dbt_ci_'"$CLEANED_BRANCH"'_*}'
